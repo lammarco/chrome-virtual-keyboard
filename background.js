@@ -1,4 +1,6 @@
-chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(bg_routine);
+
+function bg_routine(request, sender, sendResponse) {
     if (request.method == "getLocalStorage")
 	{
 		sendResponse({data: localStorage[request.key]});
@@ -100,27 +102,27 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     else {
       sendResponse({});
 	}
-});
+}
 
 function vkeyboard_loadPageIcon(tabId) {
-	chrome.pageAction.setIcon({ tabId: tabId, path: "buttons/keyboard_0.png" }, function() { })
+	chrome.action.setIcon({ tabId: tabId, path: "buttons/keyboard_0.png" }, function() { })
 	/*
 	if (localStorage["keyboardEnabled"] == "demand") {
-		chrome.pageAction.setIcon({ tabId: tabId, path: "buttons/keyboard_2.png" }, function() { })
+		chrome.action.setIcon({ tabId: tabId, path: "buttons/keyboard_2.png" }, function() { })
 	} else if (localStorage["keyboardEnabled"] != "false") {
-		chrome.pageAction.setIcon({ tabId: tabId, path: "buttons/keyboard_1.png" }, function() { })
+		chrome.action.setIcon({ tabId: tabId, path: "buttons/keyboard_1.png" }, function() { })
 	} else {
-		chrome.pageAction.setIcon({ tabId: tabId, path: "buttons/keyboard_3.png" }, function() { })
+		chrome.action.setIcon({ tabId: tabId, path: "buttons/keyboard_3.png" }, function() { })
 	}
 	*/
 }
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 	if (localStorage["toogleKeyboard"] != "false") {
-		chrome.pageAction.show(tabId);
+		chrome.action.show(tabId);
 		vkeyboard_loadPageIcon(tabId);
 	} else {
 		localStorage["keyboardEnabled"] = "true";
-		chrome.pageAction.hide(tabId);
+		chrome.action.hide(tabId);
 	}
 });
